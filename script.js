@@ -1,36 +1,62 @@
-// First Module Budget Controller module......................................................
-var budgetController = (function() {
+// BUDGET CONTROLLER..........................................................................
+var budgetController = (function() {})();
 
-    var x = 28;
-    var add = function(a){
-        return x + a;
+
+
+
+// UI CONTROLLER..............................................................................
+var UIController = (function() {
+  var DOMstrings ={
+    inputType: ".add__type",
+    inputDescription: ".add__description",
+    inputValue: ".add__value",
+    inputBtn: ".add__btn"
+  }
+
+  return {
+    //1. getInput() this method will read the inputs given by the user.....
+    getInput: function() {
+      //since the controller will call this method we will return an object containing these values
+      return {
+        type: document.querySelector(DOMstrings.inputType).value, //will either select "inc+" or "exp-"
+        description: document.querySelector(DOMstrings.inputDescription).value,
+        value: document.querySelector(DOMStrings.inputValue).value
+      };
+    },
+
+    //2. To return DOMstrings since it is also used in th econtroller module.....
+    getDOMstrings: function() {
+      return DOMstrings;
     }
-    //this IIFE will return an object that will have public access, unlike x and add .
-    return {
-        publicTest: function(b){
-            return add(b);
-        }
-    }
+  };
 })();
 
-//Second Module UI Controller module...........................................................
-
-var UIController = (function(){
-    //some code.................................
-
-})();
 
 
-// Third Module Controller module..............................................................
 
-var controller = (function(budgetCtrl, UICtrl){
+// GLOBAL APP CONTROLLER.......................................................................
+var controller = (function(budgetCtrl, UICtrl) {
 
-    var z = budgetCtrl.publicTest(5);
+  var DOM = UICtrl.getDOMstrings();// to get the DOMstrings from the UIController.......
 
-    return {
-        anotherPublic: function() {
-            console.log(z);
-        }
+  var ctrlAddItem = function() {
+    //1. Get the field input data........
+        var input = UICtrl.getInput();
+        console.log(input);
+
+    //2. Add the item to the budget controller.......
+    //3. Add the item to the UI...........
+    //4. Calculate the budget.........
+    //5. Display the budget on the UI.............
+  };
+
+  // when user clicks the right button......................................
+  document.querySelector(DOM.inputBtn).addEventListener("click", ctrlAddItem);
+
+  // when user presses ENTER key............................................
+  document.addEventListener("Keypress", function(event) {
+    if (event.keyCode === 13 || event.which === 13) {
+      ctrlAddItem();
     }
-
+  });
 })(budgetController, UIController);
