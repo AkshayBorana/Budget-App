@@ -1,8 +1,8 @@
 // BUDGET CONTROLLER..........................................................................
-let budgetController = (function() {
+let budgetController = (function () {
   // making custom objects for "expense" and "income"..............................................
 
-  let Expense = function(id, description, value) {
+  let Expense = function (id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
@@ -10,7 +10,7 @@ let budgetController = (function() {
   };
 
   // calculates the percentage..............
-  Expense.prototype.calcPercentage = function(totalIncome) {
+  Expense.prototype.calcPercentage = function (totalIncome) {
     if (totalIncome > 0) {
       this.percentage = Math.round((this.value / totalIncome) * 100);
     } else {
@@ -18,11 +18,11 @@ let budgetController = (function() {
     }
 
     // returns the percentage...............
-    Expense.prototype.getPercentage = function() {};
+    Expense.prototype.getPercentage = function () { };
     return this.percentage;
   };
 
-  let Income = function(id, description, value) {
+  let Income = function (id, description, value) {
     this.id = id;
     this.description = description;
     this.value = value;
@@ -44,10 +44,10 @@ let budgetController = (function() {
 
   // to calculate total income or total expense..........................
 
-  let calculateTotal = function(type) {
+  let calculateTotal = function (type) {
     let sum = 0;
 
-    data.allItems[type].forEach(function(cur) {
+    data.allItems[type].forEach(function (cur) {
       sum += cur.value;
     });
 
@@ -57,7 +57,7 @@ let budgetController = (function() {
 
   return {
     // this method will add an item whethr its income or expense.................................................
-    addItem: function(type, des, val) {
+    addItem: function (type, des, val) {
       let newItem, ID;
 
       //[1,2,3,4,5] next Id = 6;
@@ -87,7 +87,7 @@ let budgetController = (function() {
       return newItem; // so that we can use it elsewhere...........................................................
     },
 
-    deleteItem: function(type, id) {
+    deleteItem: function (type, id) {
       let ids, index;
 
       // id = 6
@@ -95,7 +95,7 @@ let budgetController = (function() {
       //ids = [1,2,4,6,8];
       //index = 3;
 
-      ids = data.allItems[type].map(function(current) {
+      ids = data.allItems[type].map(function (current) {
         return current.id;
       });
 
@@ -110,7 +110,7 @@ let budgetController = (function() {
 
     //Creating a public method to calculate budget.................................
 
-    calculateBudget: function() {
+    calculateBudget: function () {
       //1. calculate total income and budget........
       calculateTotal("inc");
       calculateTotal("exp");
@@ -129,29 +129,29 @@ let budgetController = (function() {
 
     //Calculate percentages................................
 
-    calculatePercentages: function() {
-        /*
-        a=20,
-        b=10
-        income= 100
-         a = 20/100 = 20%
-         b= 10/100 = 10%
-         */
+    calculatePercentages: function () {
+      /*
+      a=20,
+      b=10
+      income= 100
+       a = 20/100 = 20%
+       b= 10/100 = 10%
+       */
 
-         data.allItems.exp.forEach(function(cur){
-            cur.calcPercentage(data.totals.inc);
-        });
+      data.allItems.exp.forEach(function (cur) {
+        cur.calcPercentage(data.totals.inc);
+      });
     },
 
-    getPercentages: function(){
-        var allPerc = data.allItems.exp.map(function(cur){
-            return cur.getPercentage();
-        });
+    getPercentages: function () {
+      var allPerc = data.allItems.exp.map(function (cur) {
+        return cur.getPercentage();
+      });
     },
 
     // method to retun the calculateBudget()...............
 
-    getBudget: function() {
+    getBudget: function () {
       return {
         budget: data.budget,
         totalInc: data.totals.inc,
@@ -162,14 +162,14 @@ let budgetController = (function() {
     },
 
     // to check out data base , just for testing purpose.........................................................
-    testing: function() {
+    testing: function () {
       console.log(data);
     }
   };
 })();
 
 // UI CONTROLLER..............................................................................
-let UIController = (function() {
+let UIController = (function () {
   let DOMstrings = {
     inputType: ".add__type",
     inputDescription: ".add__description",
@@ -181,12 +181,14 @@ let UIController = (function() {
     incomeLabel: ".budget__income--value",
     expensesLabel: ".budget__expenses--value",
     percentageLabel: ".budget__expenses--percentage",
-    container: ".container"
+    container: ".container",
+    expensesPercLabel: ".item-percentage",
+    dataLabel: ".budget__title--month"
   };
 
   return {
     //1. getInput() this method will read the inputs given by the user.....
-    getInput: function() {
+    getInput: function () {
       //since the controller will call this method we will return an object containing these values
       return {
         type: document.querySelector(DOMstrings.inputType).value, //will either select "inc+" or "exp-"
@@ -197,12 +199,12 @@ let UIController = (function() {
     },
 
     //2. To return DOMstrings since it is also used in the controller module.....
-    getDOMstrings: function() {
+    getDOMstrings: function () {
       return DOMstrings;
     },
 
     //3. obj is the object that we get from newItem.................................................
-    addListItem: function(obj, type) {
+    addListItem: function (obj, type) {
       let html, newHtml, element;
 
       //1. Creating HTML string with placeholder text................................................
@@ -229,7 +231,7 @@ let UIController = (function() {
     },
 
     //4. To clear the fields, once the user has entered values..........
-    clearFields: function() {
+    clearFields: function () {
       let fields, fieldsArr;
 
       fields = document.querySelectorAll(
@@ -240,7 +242,7 @@ let UIController = (function() {
       fieldsArr = Array.prototype.slice.call(fields);
 
       //using forEach() to loop an array................
-      fieldsArr.forEach(function(current, index, array) {
+      fieldsArr.forEach(function (current, index, array) {
         current.value = "";
       });
 
@@ -249,7 +251,7 @@ let UIController = (function() {
     },
 
     //5. To display the budget, total income, total expense and percentage in the UI.............
-    displayBudget: function(obj) {
+    displayBudget: function (obj) {
       document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
       document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
       document.querySelector(DOMstrings.expensesLabel).textContent =
@@ -263,26 +265,62 @@ let UIController = (function() {
       }
     },
 
-    // To delete items from UI............................................
+    //6. To delete items from UI............................................
 
-    deleteListItem: function(selectorID) {
+    deleteListItem: function (selectorID) {
       let el = document.getElementById(selectorID);
       el.parentNode.removeChild(el);
+    },
+
+    //7. To display % on each expense in the UI..............................
+    displayPercentages: function (percentages) {
+
+      let fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
+
+      let nodeListForEach = function (list, callback) {
+        for (let i = 0; i < list.length; i++) {
+          callback(list[i], i);
+        }
+      };
+
+      nodeListForEach(fields, function (current, index) {
+
+        if (percentages[index] > 0) {
+          current.textContent = percentages[index] + "%";
+        } else {
+          current.textContent = "--";
+        }
+      });
+
+
+
+    },
+
+    // To display current month.................................................
+    displayMonth: function() {
+      let now, year, months;
+
+      months = ['January', 'February', 'March', 'April', 'May', 'June', "July","August", "September","October", "November", "December"];
+      now =  new Date();
+      month = now.getMonth();
+      year = now.getFullYear();
+      document.querySelector(DOMstrings.dataLabel).textContent = months[month] + ' ' +year;
     }
+
   };
 })();
 
 // GLOBAL APP CONTROLLER.......................................................................
-let controller = (function(budgetCtrl, UICtrl) {
+let controller = (function (budgetCtrl, UICtrl) {
   // making a function in which we will ad  all the event listeners
-  setupEventListeners = function() {
+  setupEventListeners = function () {
     let DOM = UICtrl.getDOMstrings(); // to get the DOMstrings from the UIController.......
 
     // when user clicks the right button......................................
     document.querySelector(DOM.inputBtn).addEventListener("click", ctrlAddItem);
 
     // when user presses ENTER key............................................
-    document.addEventListener("Keypress", function(event) {
+    document.addEventListener("Keypress", function (event) {
       if (event.keyCode === 13 || event.which === 13) {
         ctrlAddItem();
       }
@@ -294,7 +332,7 @@ let controller = (function(budgetCtrl, UICtrl) {
       .addEventListener("click", ctrlDeleteItem);
   };
 
-  let updateBudget = function() {
+  let updateBudget = function () {
     //1. Calculate the budget.........
     budgetCtrl.calculateBudget();
 
@@ -308,16 +346,16 @@ let controller = (function(budgetCtrl, UICtrl) {
   };
 
   // To update percentages...............
-  let updatePercentages = function() {
+  let updatePercentages = function () {
     //1.Calculate percentage............
     budgetCtrl.calculatePercentages();
     //2.Read percentages from the budget controller.........
-   let percentages= budgetCtrl.getPercentages();
+    let percentages = budgetCtrl.getPercentages();
     //3.Update the UI with the new percentages............
-    console.log(percentages);
+    UICtrl.displayPercentages(percentages)
   };
 
-  let ctrlAddItem = function() {
+  let ctrlAddItem = function () {
     let input, newItem;
 
     //1. Get the field input data........
@@ -342,7 +380,7 @@ let controller = (function(budgetCtrl, UICtrl) {
     }
   };
 
-  let ctrlDeleteItem = function(event) {
+  let ctrlDeleteItem = function (event) {
     let itemID;
 
     itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
@@ -369,8 +407,9 @@ let controller = (function(budgetCtrl, UICtrl) {
 
   //  make an init( that inititalises the app, also we want to acces it from outside so we will return it.).................
   return {
-    init: function() {
+    init: function () {
       console.log("Application has started");
+      UICtrl.displayMonth();
       UICtrl.displayBudget({
         budget: 0,
         totalInc: 0,
