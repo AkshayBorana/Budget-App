@@ -254,8 +254,7 @@ let UIController = (function () {
     displayBudget: function (obj) {
       document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
       document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
-      document.querySelector(DOMstrings.expensesLabel).textContent =
-        obj.totalExp;
+      document.querySelector(DOMstrings.expensesLabel).textContent = obj.totalExp;
 
       if (obj.percentage > 0) {
         document.querySelector(DOMstrings.percentageLabel).textContent =
@@ -360,7 +359,6 @@ let controller = (function (budgetCtrl, UICtrl) {
 
     //1. Get the field input data........
     input = UICtrl.getInput();
-    console.log(input);
 
     if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
       //2. Add the item to the budget controller.......
